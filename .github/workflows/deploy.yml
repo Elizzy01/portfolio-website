@@ -31,4 +31,4 @@ jobs:
 
       - name: Deploy to Render
         run: |
-          render deploy --service portfolio-website  # Deploy the built image to Render (using your service name)
+          render deploy --service portfolio-website-1  # Deploy the built image to Render (using your service name)
