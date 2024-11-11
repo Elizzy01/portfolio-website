@@ -7,22 +7,28 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    
+    runs-on: ubuntu-latest  # GitHub will run this job on an Ubuntu environment
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  # This checks out your repository so GitHub Actions can access it
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2  # This sets up Buildx, which allows building Docker images
 
       - name: Login to Render
-        uses: render-examples/github-actions-render@v1
+        uses: render-examples/github-actions-render@v1  # Log in to Render using your API key
         with:
-          render_api_key: ${{ secrets.RENDER_API_KEY }}
+          render_api_key: ${{ secrets.RENDER_API_KEY }}  # This passes your Render API key from GitHub secrets
 
-      - name: Build and Deploy to Render
+      - name: Build Docker image
         run: |
-          docker build -t my-app .
-          docker push my-app
-          render deploy --service my-app
+          docker build -t portfolio-website .  # Build the Docker image from your Dockerfile
+
+      - name: Push Docker image
+        run: |
+          docker push portfolio-website  # Push the built image to Docker Hub (or Render registry)
+
+      - name: Deploy to Render
+        run: |
+          render deploy --service portfolio-website  # Deploy the built image to Render (using your service name)
